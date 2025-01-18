@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Prijava</h2>
+<form method="post">
+    <div class="form-group">
+        <label>Korisničko ime:</label>
+        <input type="text" name="username" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label>Lozinka:</label>
+        <input type="password" name="password" class="form-control" required/>
+    </div>
+    <button type="submit" class="btn btn-success">Prijavi se</button>
+</form>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Popis korisnika</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Status</th>
+            <th>Zadnja izmjena</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for u in users %}
+    <tr>
+        <td>{{ u[0] }}</td>
+        <td>{{ u[1] }}</td>
+        <td>{{ u[2] }}</td>
+        <td>{{ u[3] }}</td>
+        <td>{{ u[4] }}</td>
+        <td>{{ u[5] }}</td>
+        <td>
+          {% if 'ADMIN' in session.roles %}
+            <form action="{{ url_for('ban_user', user_id=u[0]) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger">BAN</button>
+            </form>
+            <form action="{{ url_for('unban_user', user_id=u[0]) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-warning">UNBAN</button>
+            </form>
+            <form action="{{ url_for('make_vip', user_id=u[0]) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-info">Make VIP</button>
+            </form>
+            <form action="{{ url_for('remove_vip', user_id=u[0]) }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-secondary">Remove VIP</button>
+            </form>
+            <a href="{{ url_for('user_detail', user_id=u[0]) }}" class="btn btn-info btn-sm">Detalji</a>
+          {% else %}
+            -
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% if 'ADMIN' in session.roles %}
+<hr/>
+<h4>Dodaj novog korisnika</h4>
+<form method="post">
+    <div class="form-group">
+        <label>Korisničko ime:</label>
+        <input type="text" name="username" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label>Lozinka (hash/plain):</label>
+        <input type="text" name="password_hash" class="form-control" required/>
+    </div>
+    <div class="form-group">
+        <label>Ime:</label>
+        <input type="text" name="first_name" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label>Prezime:</label>
+        <input type="text" name="last_name" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label>Status:</label>
+        <select name="status" class="form-control">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="BANNED">BANNED</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Metadata (JSON):</label>
+        <input type="text" name="metadata" class="form-control" value="{}"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Dodaj korisnika</button>
+</form>
+{% endif %}
+
+{% endblock %}

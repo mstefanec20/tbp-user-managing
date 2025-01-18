@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+  {% if logged_in %}
+    <h2>Dobrodošli, {{ username }}!</h2>
+    <hr>
+    <p>Nastavite na <a href="{{ url_for('users') }}">Pregled korisnika</a>, <a href="{{ url_for('orders') }}">Narudžbe</a> ili pregledajte <a href="{{ url_for('audit_log') }}">Audit Log</a>.</p>
+  {% else %}
+    <h2>Molimo prijavite se ili registrirajte</h2>
+    <a href="{{ url_for('login') }}" class="btn btn-primary">Prijava</a>
+    <a href="{{ url_for('register') }}" class="btn btn-secondary">Registracija</a>
+  {% endif %}
+{% endblock %}

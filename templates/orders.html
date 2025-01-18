@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Narudžbe</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User ID</th>
+            <th>Datum</th>
+            <th>Cijena</th>
+            <th>Status</th>
+            <th>Uredi status</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for o in orders %}
+        <tr>
+            <td>{{ o[0] }}</td>
+            <td>{{ o[1] }}</td>
+            <td>{{ o[2] }}</td>
+            <td>{{ o[3] }}</td>
+            <td>{{ o[4] }}</td>
+            <td>
+                {% if 'roles' in session and ('ADMIN' in session.roles or 'EDITOR' in session.roles) %}
+                <form method="post" action="{{ url_for('update_order_status') }}" style="display:inline-block;">
+                    <input type="hidden" name="order_id" value="{{ o[0] }}"/>
+                    <select name="new_status" class="form-control" style="width:120px;display:inline-block;">
+                        <option value="PENDING">PENDING</option>
+                        <option value="PROCESSING">PROCESSING</option>
+                        <option value="COMPLETED">COMPLETED</option>
+                        <option value="CANCELED">CANCELED</option>
+                    </select>
+                    <button type="submit" class="btn btn-sm btn-info">Spremi</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+<form method="post" class="form-inline">
+    <label class="mr-2">Dodaj narudžbu (cijena):</label>
+    <input type="number" step="1.00" name="total_price" class="form-control mr-2" placeholder="100.00" required>
+    <button type="submit" class="btn btn-primary">Kreiraj</button>
+</form>
+{% endblock %}
